@@ -1,0 +1,13 @@
+[
+{"id":1 ,"name": "Squaw Valley", "location": "Lake Tahoe, CA", "number_of_ski_runs": 170 },
+{"id":2 ,"name": "Heavenly Mountain Resort", "location": "Lake Tahoe, CA", "number_of_ski_runs": 97 },
+{"id":3 ,"name": "Northstar California Resort", "location": "Lake Tahoe, CA", "number_of_ski_runs": 100 },
+{"id":4 ,"name": "Kirkwood Mountain Resort", "location": "Lake Tahoe, CA", "number_of_ski_runs": 65 },
+{"id":5 ,"name": "Mt. Bachelor", "location": "Bend, OR", "number_of_ski_runs": 93 },
+{"id":6 ,"name": "Snowbird Ski & Summer Resort", "location": "Little Cottonwood Canyon, UT", "number_of_ski_runs": 114 },
+{"id":7 ,"name": "Big Sky Resort", "location": "Montana", "number_of_ski_runs": 300 },
+{"id":8 ,"name": "Jackson Hole Mountain Resort", "location": "Wyoming", "number_of_ski_runs": 116 },
+{"id":9 ,"name": "Alta Ski Area", "location": "Little Cottonwood Canyon, UT", "number_of_ski_runs": 116 },
+{"id":10 ,"name": "Steamboat Resort", "location": "Steamboat Springs, CO", "number_of_ski_runs": 165 }
+]
+

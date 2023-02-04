@@ -1,93 +1,173 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from "react";
+import { nanoid } from "nanoid";
+import "./App.css";
+import data from "./mock-data.json";
+import ReadOnlyRow from "./components/ReadOnlyRow";
+import EditableRow from "./components/EditableRow";
 
-const SkiResort = ({ resort, onDelete, onUpdate }) => (
-  <li>
-    {resort.name}, {resort.location}, {resort.number_of_ski_runs}
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    <button onClick={onDelete}>Delete</button>
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    <button onClick={() => onUpdate(resort)}>Edit</button>
-  </li>
-);
+const App = () => {
+  const [resorts, setResorts] = useState(data);
+  const [addFormData, setAddFormData] = useState({
+    name: "",
+    location: "",
+    number_of_ski_runs: ""
+  });
 
-const SkiResorts = () => {
-  
-  const [resorts, setResorts] = useState([
-    { name: 'Squaw Valley', location: 'Lake Tahoe, CA', 'number_of_ski_runs':2 },
-    { name: 'Aspen Mountain', location: 'Aspen, CO' , 'number_of_ski_runs':4},
-    { name: 'Deer Valley', location: 'Park City, UT' , 'number_of_ski_runs':5},
-  ]);
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+    location: "",
+    number_of_ski_runs: ""
+  });
 
+  const [editResortId, setEditResortId] = useState(null);
 
-  const [newResort, setNewResort] = useState({ name: '', location: '', number_of_ski_runs: 0});
-
-  const handleAddResort = (event) => {
+  const handleAddFormChange = (event) => {
     event.preventDefault();
-    setResorts([...resorts, newResort]);
-    setNewResort({ name: '', location: '',  number_of_ski_runs:0  });
+
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = { ...addFormData };
+    newFormData[fieldName] = fieldValue;
+
+    setAddFormData(newFormData);
   };
 
-  const handleDeleteResort = (index) => {
-    setResorts(resorts.filter((_, i) => i !== index));
+  const handleEditFormChange = (event) => {
+    event.preventDefault();
+
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = { ...editFormData };
+    newFormData[fieldName] = fieldValue;
+
+    setEditFormData(newFormData);
   };
 
-  const handleUpdateResort = (index, updatedResort) => {
-    setResorts(
-      resorts.map((resort, i) => {
-        if (i === index) {
-          return updatedResort;
-        }
-        return resort;
-      })
-    );
+  const handleAddFormSubmit = (event) => {
+    event.preventDefault();
+
+    const newResort = {
+      id: nanoid(),
+      name: addFormData.name,
+      location: addFormData.location,
+      number_of_ski_runs: addFormData.number_of_ski_runs
+    };
+
+    const newResorts = [...resorts, newResort];
+    setResorts(newResorts);
+  };
+
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
+
+    const editedResort = {
+      id: editResortId,
+      name: editFormData.name,
+      location: editFormData.location,
+      number_of_ski_runs: editFormData.number_of_ski_runs
+    };
+
+    const newResorts = [...resorts];
+
+    const index = resorts.findIndex((resort) => resort.id === editResortId);
+
+    newResorts[index] = editedResort;
+
+    setResorts(newResorts);
+    setEditResortId(null);
+  };
+
+  const handleEditClick = (event, resort) => {
+    event.preventDefault();
+    setEditResortId(resort.id);
+
+    const formValues = {
+      name: resort.name,
+      location: resort.location,
+      number_of_ski_runs: resort.number_of_ski_runs
+    };
+
+    setEditFormData(formValues);
+  };
+
+  const handleCancelClick = () => {
+    setEditResortId(null);
+  };
+
+  const handleDeleteClick = (contactId) => {
+    const newResorts = [...resorts];
+
+    const index = resorts.findIndex((resort) => resort.id === contactId);
+
+    newResorts.splice(index, 1);
+
+    setResorts(newResorts);
   };
 
   return (
-    <div>
-      <h2>Ski Resorts</h2>
-      <ul>
-        {resorts.map((resort, index) => (
-          <SkiResort
-            key={index}
-            resort={resort}
-            onDelete={() => handleDeleteResort(index)}
-            onUpdate={(updatedResort) => handleUpdateResort(index, updatedResort)}
-          />
-        ))}
-      </ul>
-      <form onSubmit={handleAddResort}>
+    <div className="app-container">
+    <h2>Ski Resorts</h2>
+
+      <form onSubmit={handleEditFormSubmit}>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>location</th>
+              <th>Number of Ski runs</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resorts.map((resort) => (
+              <Fragment>
+                {editResortId === resort.id ? (
+                  <EditableRow
+                    editFormData={editFormData}
+                    handleEditFormChange={handleEditFormChange}
+                    handleCancelClick={handleCancelClick}
+                  />
+                ) : (
+                  <ReadOnlyRow
+                    resort={resort}
+                    handleEditClick={handleEditClick}
+                    handleDeleteClick={handleDeleteClick}
+                  />
+                )}
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+      </form>
+
+      <h2>Add a Resorts</h2>
+      <form onSubmit={handleAddFormSubmit}>
         <input
           type="text"
-          value={newResort.name}
-          onChange={(event) =>
-            setNewResort({ ...newResort, name: event.target.value })
-          }
-          placeholder="Name"
+          name="name"
+          required="required"
+          placeholder="Enter a name..."
+          onChange={handleAddFormChange}
         />
         <input
           type="text"
-          value={newResort.location}
-          onChange={(event) =>
-            setNewResort({ ...newResort, location: event.target.value })
-          }
-          placeholder="Location"
-        />  
-          <input
-          type="number"
-          value={newResort.number_of_ski_runs}
-          onChange={(event) =>
-            setNewResort({ ...newResort, number_of_ski_runs: event.target.value })
-          }
-          placeholder="Number Of ski runs"
+          name="location"
+          required="required"
+          placeholder="Enter an location..."
+          onChange={handleAddFormChange}
         />
-        <button type="submit">Add Resort</button>
+        <input
+          type="text"
+          name="number_of_ski_runs"
+          required="required"
+          placeholder="Enter a ski location..."
+          onChange={handleAddFormChange}
+        />
+        <button type="submit">Add</button>
       </form>
     </div>
   );
 };
 
-export default SkiResorts;
+export default App;
