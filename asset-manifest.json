@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Entabeni/static/css/main.a6ac2cf6.css",
+    "main.js": "/Entabeni/static/js/main.13bb08f7.js",
+    "static/js/787.bcf41448.chunk.js": "/Entabeni/static/js/787.bcf41448.chunk.js",
+    "index.html": "/Entabeni/index.html",
+    "main.a6ac2cf6.css.map": "/Entabeni/static/css/main.a6ac2cf6.css.map",
+    "main.13bb08f7.js.map": "/Entabeni/static/js/main.13bb08f7.js.map",
+    "787.bcf41448.chunk.js.map": "/Entabeni/static/js/787.bcf41448.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a6ac2cf6.css",
+    "static/js/main.13bb08f7.js"
+  ]
+}
