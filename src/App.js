@@ -1,12 +1,26 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment , useRef} from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import data from "./mock-data.json";
 import ReadOnlyRow from "./components/ReadOnlyRow";
 import EditableRow from "./components/EditableRow";
+// import WebcamCapture from "./components/WebcamCapture";
 
 const App = () => {
   const [resorts, setResorts] = useState(data);
+  const [image, setImage] = useState(null);
+  const videoRef = useRef(null);
+  navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      videoRef.current.srcObject = stream;
+  });
+  const capture = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
+    setImage(canvas.toDataURL("image/png"));
+  };
+  
   const [addFormData, setAddFormData] = useState({
     name: "",
     location: "",
@@ -166,7 +180,13 @@ const App = () => {
         />
         <button type="submit">Add</button>
       </form>
+    <div>
+        <video ref={videoRef} autoPlay />
+        <button onClick={capture}>Capture</button>
+        {image && <img src={image} alt="Captured Image" />}
     </div>
+    </div>
+
   );
 };
 
