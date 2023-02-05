@@ -38,8 +38,8 @@
     ]
   },
   "devDependencies": {
+    "enzyme": "^3.11.0",
     "gh-pages": "^5.0.0"
   },
-    "homepage": "https://noble-8github.io/Entabeni"
-
+  "homepage": "https://noble-8github.io/Entabeni"
 }

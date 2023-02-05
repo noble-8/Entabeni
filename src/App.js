@@ -1,4 +1,4 @@
-import React, { useState, Fragment , useRef} from "react";
+import React, { useEffect, useState, Fragment , useRef} from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import data from "./mock-data.json";
@@ -10,17 +10,26 @@ const App = () => {
   const [resorts, setResorts] = useState(data);
   const [image, setImage] = useState(null);
   const videoRef = useRef(null);
-  navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      videoRef.current.srcObject = stream;
-  });
+  navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia;
+  if (navigator.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      if(videoRef.current){
+        videoRef.current.srcObject = stream;
+      }
+    });  
+  }
+  
   const capture = () => {
+
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
     canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
     setImage(canvas.toDataURL("image/png"));
   };
-  
+
   const [addFormData, setAddFormData] = useState({
     name: "",
     location: "",
@@ -110,10 +119,10 @@ const App = () => {
     setEditResortId(null);
   };
 
-  const handleDeleteClick = (contactId) => {
+  const handleDeleteClick = (resortId) => {
     const newResorts = [...resorts];
 
-    const index = resorts.findIndex((resort) => resort.id === contactId);
+    const index = resorts.findIndex((resort) => resort.id === resortId);
 
     newResorts.splice(index, 1);
 
@@ -172,16 +181,17 @@ const App = () => {
           onChange={handleAddFormChange}
         />
         <input
-          type="text"
+          type="number"
           name="number_of_ski_runs"
           required="required"
-          placeholder="Enter a ski location..."
+          placeholder="Enter number of ski runs..."
           onChange={handleAddFormChange}
         />
-        <button type="submit">Add</button>
+        <button data-testid="addButton" type="submit">Add</button>
       </form>
     <div>
         <video ref={videoRef} autoPlay />
+        <br/>
         <button onClick={capture}>Capture</button>
         {image && <img src={image} alt="Captured Image" />}
     </div>
