@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# create a simple crud app that displays a list of ski resorts
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
