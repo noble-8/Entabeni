@@ -1,5 +1,16 @@
-# create a simple crud app that displays a list of ski resorts
-
+# a simple crud app that displays a list of ski resorts
+Task:
+Implement a React component that displays a list of ski resorts. The component should allow users to perform CRUD operations on the list of ski resorts using local state. The component should include the following functionality and save all info to local state (No network requests)
+1. Display a list of ski resorts, each with the following information: name, location, and number of ski runs.
+2. Allow users to add a new ski resort to the list by filling out a form that includes the name, location, and number of ski runs. The form should include client-side validation to ensure that all required fields are filled out.
+3. Allow users to edit the information for an existing ski resort.
+4. Allow users to delete a ski resort from the list.
+5. Style the component to match a provided design.
+6. Add new photos of resort through webcam
+7. Write some unit test cases
+8. Push to git
+9. Deploy to a free service to allow us to use the component
+hosted here: https://noble-8.github.io/Entabeni/
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
