@@ -10,24 +10,35 @@ const App = () => {
   const [resorts, setResorts] = useState(data);
   const [image, setImage] = useState(null);
   const videoRef = useRef(null);
-  navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-  if (navigator.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-      if(videoRef.current){
-        videoRef.current.srcObject = stream;
-      }
-    });  
-  }
+
+   useEffect(() => {
+    const video = videoRef.current;
+
+    if (video) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(stream => {
+          video.srcObject = stream;
+        });
+    }
+  }, []);
+
   
+
   const capture = () => {
 
-    const canvas = document.createElement("canvas");
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
-    setImage(canvas.toDataURL("image/png"));
+
+    const video = videoRef.current;
+
+    if (video) {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      setImage(canvas.toDataURL());
+    }
   };
 
   const [addFormData, setAddFormData] = useState({
@@ -190,9 +201,11 @@ const App = () => {
         <button data-testid="addButton" type="submit">Add</button>
       </form>
     <div>
+        <button onClick={capture}>Capture</button>
+        <br/>
         <video ref={videoRef} autoPlay />
         <br/>
-        <button onClick={capture}>Capture</button>
+        <br/>
         {image && <img src={image} alt="Captured Image" />}
     </div>
     </div>
